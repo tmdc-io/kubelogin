@@ -49,7 +49,7 @@ lint: $(GOLANGCI_LINT)
 test: lint
 	go test -race -coverprofile=coverage.txt -covermode=atomic ./...
 
-$(TARGET): clean tidy fmt vet
+$(TARGET): clean tidy
 	CGO_ENABLED=$(if $(CGO_ENABLED),$(CGO_ENABLED),0) go build -o $(BIN) -ldflags "$(LDFLAGS)"
 
 clean:
