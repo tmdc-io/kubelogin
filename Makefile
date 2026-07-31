@@ -49,7 +49,7 @@ lint: $(GOLANGCI_LINT)
 test: lint
 	go test -race -coverprofile=coverage.txt -covermode=atomic ./...
 
-$(TARGET): clean
+$(TARGET): clean tidy fmt vet
 	CGO_ENABLED=$(if $(CGO_ENABLED),$(CGO_ENABLED),0) go build -o $(BIN) -ldflags "$(LDFLAGS)"
 
 clean:
@@ -74,3 +74,12 @@ build-image: $(TARGET)
 	@if [ "$(GIT_TAG)" != "" ]; then \
 		docker tag $(IMAGE_NAME):$(IMAGE_TAG) $(IMAGE_NAME):latest; \
 	fi
+
+tidy:
+	go mod tidy
+
+fmt:
+	go fmt ./...
+
+vet:
+	go vet ./...
